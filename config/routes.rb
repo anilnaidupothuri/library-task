@@ -4,4 +4,5 @@ Rails.application.routes.draw do
   resources :users  
   resources :tokens, only: [:create]
   resources :books
+  resources :students
 end

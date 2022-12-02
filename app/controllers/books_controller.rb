@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class BooksController < ApplicationController
-	before_action :check_login, only: [:create, :update]
-  before_action :set_book, only: %i[show update delete]
+	before_action :check_login, only: [:create, :update,]
+  before_action :set_book, only: %i[show update destroy]
   def show
     render json: @book
   end

@@ -47,4 +47,15 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     patch book_url(@book), params: { book: {name:"test1", writter: "newton s"}}, as: :json 
     assert_response :forbidden
   end
+
+  test 'should destroy book when login' do 
+
+    assert_difference('Book.count', -1) do 
+      delete book_url(@book)
+      end 
+      assert_response :no_content
+    end
+
+
+
 end

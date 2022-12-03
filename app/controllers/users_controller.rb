@@ -2,6 +2,7 @@
 
 class UsersController < ApplicationController
   before_action :set_user, only: %i[show update destroy]
+  before_action :check_owner, only: [:update, :destroy]
   def show
     render json: @user
   end
@@ -22,8 +23,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.update(user_params)
-    render json: @user
+    if @user.update(user_params)
+        render json: @user
+      else
+        byebug
+        render json: {status: "error", code: 3000, message: "Can't find purchases without start and end date"}
+    end
   end
 
   def destroy
@@ -39,5 +44,9 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def check_owner
+    head :forbidden unless @user.id == current_user.id 
   end
 end

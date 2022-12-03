@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Book < ApplicationRecord
-	has_many :assigned_books
+  has_one :assigned_books
 end

@@ -5,6 +5,7 @@ class User < ApplicationRecord
   validates :email, uniqueness: true
 
   has_many :books
+  has_many :students
   has_many :assigned_books
   has_secure_password
 

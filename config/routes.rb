@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   resources :tokens, only: [:create]
   resources :books
   resources :students
+  put 'returned_books', to: 'assigned_books#returned'
   resources :assigned_books
-  resources :returned_books
+
+  
+  
 end

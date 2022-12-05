@@ -2,6 +2,7 @@
 
 class AssignedBooksController < ApplicationController
   before_action :set_assigned_book, only: %i[show destroy update]
+  before_action :check_login
   def show
     render json: @assigned
   end
@@ -12,32 +13,37 @@ class AssignedBooksController < ApplicationController
   end
 
   def create
-    @assigned = current_user.assigned_books.create(assigned_params)
-    
-    byebug
-    if AssignedBook.find_student_book(params[:student_id],params[:book_id]).nil?
-    
-    @assigned.save
+    @assigned = current_user.assigned_books.new(assigned_params)
+
+    if @assigned.save
       render json: @assigned
     else
-
-      render json: "book is aleardy taken"
+      render json: @assigned.errors
     end
   end
-
-  
-
-
 
   def destroy
     @assigned.destroy
     head :no_content
   end
 
+  def returned
+    if AssignedBook.find_student_book(params[:student_id], params[:book_id]).empty?
+      render json: 'book is not found'
+    else
+      a = AssignedBook.find_student_book(params[:student_id], params[:book_id]).update(assigned: false,
+                                                                                       Returned_date: Date.today)
+
+      penality = AssignedBook.find_penality(a.first)
+
+      render json: penality
+    end
+  end
+
   private
 
   def assigned_params
-    params.require(:assigned_book).permit(:Book_Name, :Student_name, :student_id, :book_id)
+    params.require(:assigned_book).permit(:student_id, :book_id, :assigned)
   end
 
   def set_assigned_book

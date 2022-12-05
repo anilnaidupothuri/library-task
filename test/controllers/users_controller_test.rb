@@ -35,9 +35,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should update users' do
-    patch user_url(@user), params: { user: { name: 'test1' } }, as: :json
+    patch user_url(@user), params: { user: { name: 'test1' } },
+                           headers: {Authorization: JsonWebToken.encode(user_id: @user.id)}, as: :json
     assert_response :success
   end
+
+  test 'should forbid update user' do 
+     patch user_url(@user), params: { user: { name:"test2"}}, as: :json
+     assert_response :forbidden
+  end
+
 
   test 'should delete user' do
     assert_difference('User.count', -1) do

@@ -14,20 +14,16 @@ class AssignedBooksController < ApplicationController
   def create
     @assigned = current_user.assigned_books.create(assigned_params)
     
-    byebug
+  
     if AssignedBook.find_student_book(params[:student_id],params[:book_id]).nil?
     
-    @assigned.save
+      @assigned.save
       render json: @assigned
     else
 
       render json: "book is aleardy taken"
     end
   end
-
-  
-
-
 
   def destroy
     @assigned.destroy

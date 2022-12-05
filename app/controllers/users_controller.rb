@@ -26,8 +26,8 @@ class UsersController < ApplicationController
     if @user.update(user_params)
         render json: @user
       else
-        byebug
-        render json: {status: "error", code: 3000, message: "Can't find purchases without start and end date"}
+        
+        render json: @user.errors, status: :unprocessable_entity
     end
   end
 

@@ -13,7 +13,7 @@ class StudentsController < ApplicationController
 
 	def create 
 
-		@student= Student.create(student_params)
+		@student= current_user.students.create(student_params)
 		if @student.save 
 			render json: @student, status: :created 
         else 

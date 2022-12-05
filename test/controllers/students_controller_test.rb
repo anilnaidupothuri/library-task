@@ -3,6 +3,7 @@ require 'test_helper'
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do 
     @student = students(:one)
+    @user = users(:one)
   end
 
   test 'should show student' do 
@@ -20,15 +21,24 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create users ' do 
     assert_difference('Student.count') do 
-    post students_url, params:{ student:{name:"student1", study:"b.tech", address:"vijayawada ibm"}}, as: :json
+    post students_url, params:{ student:{name:"student1", study:"b.tech", address:"vijayawada ibm"}},
+                       headers: { Authorization: JsonWebToken.encode(user_id: @user.id)}, as: :json
     end
         assert_response :success
   end
 
-  test 'should update students' do 
-    patch student_url(@student), params: { student: {name:"student 3"}}, as: :json 
-    assert_response :success
-  end
+  # test 'should update students when login' do 
+  #   patch student_url(@student), params: { student: {name:"student 3"}},
+  #                                headers: { Authorization: JsonWebToken.encode(user_id: @user.id)}, as: :json 
+  #   assert_response :success
+  # end
+  
+  # test 'should forhibt update student with out login' do 
+  #   patch student_url(@student), params: { student: {name: "student"}},
+  #                                as: :json
+  #   assert_response :forbidden
+  # end
+
 
   test 'should destroy student' do 
     assert_difference('Student.count', -1) do 

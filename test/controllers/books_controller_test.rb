@@ -48,14 +48,10 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
 
-  test 'should destroy book when login' do 
-
+  test 'should destroy book when login' do
     assert_difference('Book.count', -1) do 
       delete book_url(@book)
       end 
       assert_response :no_content
     end
-
-
-
 end

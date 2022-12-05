@@ -4,8 +4,10 @@ one:
   name: Student1
   study: MyString
   address: MyString
+  user: one
 
 two:
   name: Student2
   study: MyString
   address: MyString
+  user: two

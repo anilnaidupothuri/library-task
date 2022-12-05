@@ -27,22 +27,33 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should not create user with already taken email' do
+  test 'should not create user with already taken email' do 
     assert_no_difference('User.count') do
       post users_url, params: { user: { name: 'svdc', email: @user.email, password: '12334' } }, as: :json
     end
     assert_response :unprocessable_entity
   end
 
-  test 'should update users' do
-    patch user_url(@user), params: { user: { name: 'test1' } }, as: :json
+  test 'should update users' do 
+    patch user_url(@user), params: {user: {name: 'test'}},
+                            headers: {Authorization: JsonWebToken.encode(user_id: @user.id)},
+                            as: :json
     assert_response :success
   end
 
-  test 'should delete user' do
-    assert_difference('User.count', -1) do
-      delete user_url(@user)
-    end
-    assert_response :no_content
+  test 'should forbid update users' do
+    other_user = users(:two)
+    patch user_url(@user), params: { user: { name: 'test1' } },
+                           headers: { Authorization: JsonWebToken.encode(user_id: other_user.id)}, as: :json
+    assert_response :forbidden
   end
+
+  # test 'should delete user' do
+  #   assert_difference('User.count', -1) do
+  #     delete user_url(@user), headers: { Authorization: JsonWebToken.encode(user_id: @user.id) },as: :json
+  #   end
+  #   assert_response :no_content
+  # end
+
+
 end

@@ -1,6 +1,7 @@
 class StudentsController < ApplicationController
 
 	before_action :set_student, only: [:show, :update, :destroy]
+	before_action :check_login, only: [:create, :delete, :update]
 	def show 
 		render json:@student 
 	end 

@@ -23,9 +23,8 @@ class AssignedBooksControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create assigned books' do 
     assert_difference('AssignedBook.count') do 
-      post assigned_books_url, params:{ assigned_book: {Student_Name:@student.name,Book_Name: @book.name,
-                                       book_id: @book.id, student_id:@student.id} }, as: :json
-       byebug                                
+      post assigned_books_url, params:{ assigned_book: {book_id: @book.id, student_id:@student.id} }, as: :json
+       byebug                  headers: {Authorization :}          
       end 
       assert_response :success 
     end

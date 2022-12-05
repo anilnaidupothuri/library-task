@@ -7,12 +7,12 @@ class AssignedBook < ApplicationRecord
   belongs_to :book
   belongs_to :user
 
-  def self.find_student_book(s_id, b_id)
-    where(student_id: s_id, book_id: b_id)
+  def self.find_student_book(params)
+    where(student_id: params[:student_id], book_id: params[:book_id])
   end
 
   def self.find_penality(penality)
-    duration = (penality.Returned_date - penality.created_at.to_date).to_i
+    duration = ((Date.today + 20.days) - penality.created_at.to_date).to_i
     penality_days = duration - 15
 
     if duration <= 15

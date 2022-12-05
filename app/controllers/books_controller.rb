@@ -13,7 +13,7 @@ class BooksController < ApplicationController
   end
 
   def create
-    book = Book.create(book_params)
+    book = current_user.books.create(book_params)
     if book.save
       render json: book, status: :created
     else

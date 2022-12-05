@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AssignedBooksController < ApplicationController
-  before_action :set_assigned_book, only: %i[show destroy]
+  before_action :set_assigned_book, only: %i[show destroy update]
   def show
     render json: @assigned
   end
@@ -12,13 +12,22 @@ class AssignedBooksController < ApplicationController
   end
 
   def create
-    @assigned = AssignedBook.create(assigned_params)
-    if @assigned.save
+    @assigned = current_user.assigned_books.create(assigned_params)
+    
+    byebug
+    if AssignedBook.find_student_book(params[:student_id],params[:book_id]).nil?
+    
+    @assigned.save
       render json: @assigned
     else
-      render json: 'book is aleardy taken'
+
+      render json: "book is aleardy taken"
     end
   end
+
+  
+
+
 
   def destroy
     @assigned.destroy

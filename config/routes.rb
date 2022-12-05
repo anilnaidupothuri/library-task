@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   resources :books
   resources :students
   resources :assigned_books
+  resources :returned_books
 end

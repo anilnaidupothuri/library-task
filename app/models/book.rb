@@ -2,5 +2,5 @@
 
 class Book < ApplicationRecord
   has_one :assigned_books 
-  has_one :user 
+  belongs_to :user 
 end

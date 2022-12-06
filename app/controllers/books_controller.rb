@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class BooksController < ApplicationController
-	before_action :check_login, only: [:create, :update,]
+  before_action :check_login, only: %i[create update]
   before_action :set_book, only: %i[show update destroy]
   def show
     render json: @book
@@ -9,7 +9,7 @@ class BooksController < ApplicationController
 
   def index
     @books = Book.all
-    render json:@books
+    render json: @books
   end
 
   def create
@@ -34,7 +34,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:name, :price, :writter, :pages)
+    params.require(:book).permit(:name, :price, :writter, :pages, :image)
   end
 
   def set_book

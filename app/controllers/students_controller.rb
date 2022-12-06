@@ -4,12 +4,26 @@ class StudentsController < ApplicationController
   before_action :set_student, only: %i[show update destroy]
   before_action :check_login, only: %i[create delete update]
   def show
-    render json: @student
+    if @student.image.attached?
+
+      render json: { student: @student, image_url: url_for(@student.image) }
+    else
+      render json: { student: @student, image_url: nil }
+    end
   end
 
   def index
     @students = Student.all
-    render json: @students
+    
+    arr = []
+    @students.each do |s|
+      student = {}
+      student[:data] = s
+      student[:image] = url_for(s.image) if s.image.attached?
+      student[:image] = nil unless s.image.attached?
+      arr << student
+    end
+    render json: { student: arr }
   end
 
   def create
@@ -22,8 +36,11 @@ class StudentsController < ApplicationController
   end
 
   def update
-    @student.update(student_params)
-    render json: @student
+    if @student.update(student_params)
+      render json: @student
+    else
+      render json: @student.errors
+    end
   end
 
   def destroy

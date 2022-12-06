@@ -4,7 +4,14 @@ class BooksController < ApplicationController
   before_action :check_login, only: %i[create update]
   before_action :set_book, only: %i[show update destroy]
   def show
-    render json: @book
+    if @book.image.attached?
+
+      # cover_url = rails_blob_path(@book.image, disposition: "attachment", only_path: true)
+      # render json: {book:@book, image: "http://localhost:3000#{cover_url}"}
+      render json: { book: @book, image: url_for(@book.image) }
+    else
+      render json: { book: @book, image: nil }
+    end
   end
 
   def index
